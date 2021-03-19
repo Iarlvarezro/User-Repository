@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <section>
+        <h2>Register</h2>
+        <form id='register'>
+            <label for="">email</label>
+            <input name="email" type="email">
+            <label for="">password</label>
+            <input name="password" type="password">
+            <label for="">name</label>
+            <input name="name" type="text">
+            <button type="submit">Register</button>
+        </form>
+    </section>
+    <section>
+        <h2>Change password</h2>
+        <form id='cp'>
+            <label for="">id</label>
+            <input name="id" type="text">
+            <label for="">old password</label>
+            <input name="oldPassword" type="password">
+            <label for="">new password</label>
+            <input name="newPassword" type="password">
+            <button type="submit">Change password</button>
+        </form>
+    </section>
+    <script>
+        const register = document.getElementById('register');
+        register.addEventListener('submit', (ev)=> {
+            ev.preventDefault();
+            ev.stopPropagation();
+            const {email, password, name} = register.elements;
+            fetch('/users', {
+                method: 'POST',
+                body: JSON.stringify({
+                    email: email.value,
+                    password: password.value,
+                    name: name.value
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        });
+
+        const changePassword = document.getElementById('cp');
+        changePassword.addEventListener('submit', (ev)=> {
+            ev.preventDefault();
+            ev.stopPropagation();
+            const {id, oldPassword, newPassword} = changePassword.elements;
+            fetch('/users/change-password', {
+                method: 'POST',
+                body: JSON.stringify({
+                    id: id.value,
+                    oldPassword: oldPassword.value,
+                    newPassword: newPassword.value
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        });
+    </script>
+</body>
+</html>
