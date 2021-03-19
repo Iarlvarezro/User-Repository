@@ -4,8 +4,8 @@ export class User {
     id;
     name;
     email;
+    surname;
     password;
-    avatar;
     role = ROLES.CUSTOMER;
     setPassword(newPassword){
         this.password = newPassword;

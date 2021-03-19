@@ -2,11 +2,15 @@ import bodyParser from 'body-parser';
 import {body} from 'express-validator';
 import {UserApplication} from '../application/user-application.js';
 import { validator, password } from '../util/validator.js';
+import cors from 'cors'
+
+var corsOptions = {
+    origin: "*"
+  }
 
 export class UserController {
     static register(app) {
         app.post('/users', [
-            bodyParser.json(),
             body('email').isEmail(),
             password('password'),
             body('name').notEmpty({ignore_whitespace:true}).withMessage('El nombre es requerido'),
@@ -26,7 +30,7 @@ export class UserController {
             }
         });
         app.post('/users/change-password', [
-            bodyParser.json(),
+
             body('id').notEmpty(),
             body('oldPassword').notEmpty(),
             password('newPassword'),
