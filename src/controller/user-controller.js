@@ -1,12 +1,8 @@
-import bodyParser from 'body-parser';
+
 import {body} from 'express-validator';
 import {UserApplication} from '../application/user-application.js';
 import { validator, password } from '../util/validator.js';
-import cors from 'cors'
 
-var corsOptions = {
-    origin: "*"
-  }
 
 export class UserController {
     static register(app) {
@@ -29,16 +25,14 @@ export class UserController {
                 controller.dispose();
             }
         });
-        app.post('/users/change-password', [
-
-            body('id').notEmpty(),
-            body('oldPassword').notEmpty(),
-            password('newPassword'),
+        app.post('/login', [
+            body('email').notEmpty(),
+            body('password').notEmpty(),
             validator
         ], async (req, res) => {
             let controller = new UserController();
             try {
-                await controller.changePassword(req.body);
+                await controller.login(req.body);
                 res.status(204).end();
             } catch (err) {
                 console.log(err)
@@ -55,8 +49,8 @@ export class UserController {
     post(userDTO) {
         return this._application.register(userDTO);
     }
-    changePassword(userChangePasswordDTO){
-        return this._application.changePassword(userChangePasswordDTO)
+    login(userLogin){
+        return this._application.login(userLogin)
     }
     dispose(){
         this._application.dispose();

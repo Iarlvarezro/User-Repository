@@ -7,8 +7,15 @@ export class Repository {
     _getHash(id) {
         return `${this._hash}:${id}`;
     }
+    _getHashEmail(email) {
+        return `email:${email}`;
+    }
     async add(entity) {
-        await this._set(entity);
+        const {email,id} = entity;
+        await this._client.multi()
+            .set(this._getHash(id), JSON.stringify(entity))
+            .set(this._getHashEmail(email),JSON.stringify({id}))
+            .exec()
         return entity;
     }
     async update(entity) {
@@ -26,8 +33,13 @@ export class Repository {
         }
         return this._createDomainInstance(res);
     }
-    findBy(fields) {
-        // TODO
+    async findByEmail(email) {
+        const res = await this._client.get(this._getHashEmail(email));
+        if(!res){
+            return null;
+        }
+        const {id} = JSON.parse(res);
+        return this.findById(id)
     }
     _set(entity){
         return this._client.set(this._getHash(entity.id), JSON.stringify(entity));

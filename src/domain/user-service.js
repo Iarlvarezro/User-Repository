@@ -4,11 +4,12 @@ import {User} from './user.js';
 
 export class UserService {
     static create(userDTO) {
-        const { name, email, password } = userDTO;
+        const { name, email, password, surname } = userDTO;
         const user = new User();
         Object.assign(user, {
             name,
             email,
+            surname,
             password: this.encryptPassword(password),
             id: uuid.v4()
         });
