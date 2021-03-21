@@ -6,6 +6,7 @@ export class User {
     email;
     surname;
     password;
+    provider;
     role = ROLES.CUSTOMER;
     setPassword(newPassword){
         this.password = newPassword;

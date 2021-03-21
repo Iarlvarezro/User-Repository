@@ -15,7 +15,7 @@ export class UserController {
             let controller = new UserController();
             try {
                 const result = await controller.post(req.body);
-                res.status(201).send(result);
+                res.status(200).send(result);
             } catch (err) {
                 console.log(err);
                 const code = err.code || 500;
@@ -32,8 +32,29 @@ export class UserController {
         ], async (req, res) => {
             let controller = new UserController();
             try {
-                await controller.login(req.body);
-                res.status(204).end();
+                const result = await controller.login(req.body);
+                res.status(200).send(result).end();
+            } catch (err) {
+                console.log(err)
+                const code = err.code || 500;
+                const msg = err.code === 500 ? 'Error inesperado' : err.message
+                res.status(code).send(msg).end();
+            }
+            finally {
+                controller.dispose();
+            }
+        })
+
+        app.post('/login/google', [
+            body('email').notEmpty(),
+            body('name').notEmpty(),
+            body('surname').notEmpty(),
+            validator
+        ], async (req, res) => {
+            let controller = new UserController();
+            try {
+                const result = await controller.loginGoogle(req.body);
+                res.status(200).send(result).end();
             } catch (err) {
                 console.log(err)
                 const code = err.code || 500;
@@ -51,6 +72,9 @@ export class UserController {
     }
     login(userLogin){
         return this._application.login(userLogin)
+    }
+    loginGoogle(userLogin){
+        return this._application.loginGoogle(userLogin)
     }
     dispose(){
         this._application.dispose();
