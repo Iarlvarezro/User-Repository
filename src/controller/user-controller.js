@@ -27,7 +27,7 @@ export class UserController {
         });
         app.post('/login', [
             body('email').notEmpty(),
-            body('password').notEmpty(),
+            // body('password').notEmpty(),
             validator
         ], async (req, res) => {
             let controller = new UserController();
